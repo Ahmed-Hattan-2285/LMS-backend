@@ -20,3 +20,14 @@ class CoursesIndex(APIView):
       return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as err:
       return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class CourseDetail(APIView):
+  serializer_class = CourseSerializer
+
+  def get(self, request, id):
+    try:
+      course = Course.objects.get(id=id)
+      serializer = self.serializer_class(course)
+      return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as err:
+      return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
