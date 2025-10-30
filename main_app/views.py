@@ -45,3 +45,22 @@ class CourseDetail(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as err:
             return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def put(self, request, id):
+        try:
+            course = Course.objects.get(id=id)
+            serializer = self.serializer_class(course, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as err:
+            return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def delete(self, request, id):
+        try:
+            course = Course.objects.get(id=id)
+            course.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Exception as err:
+            return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
