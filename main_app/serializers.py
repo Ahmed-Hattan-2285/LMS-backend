@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
-from .models import Course, Lesson, CoverCourse, User
+from .models import Course, Lesson, CoverCourse, User, Review
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
@@ -26,7 +26,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class InstructorSerializer(serializers.ModelSerializer):
-    """Simplified serializer for displaying instructor information"""
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email')
@@ -43,6 +42,22 @@ class LessonSerializer(serializers.ModelSerializer):
         model = Lesson
         fields = '__all__'
 
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name')
+
+class ReviewSerializer(serializers.ModelSerializer):
+    student = StudentSerializer(read_only=True)
+    course = serializers.PrimaryKeyRelatedField(
+        queryset=Course.objects.all()
+    )
+    
+    class Meta:
+        model = Review
+        fields = ('id', 'course', 'student', 'rating', 'comment', 'created_at', 'updated_at')
+        read_only_fields = ('created_at', 'updated_at', 'student')
+
 class CourseSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(many=True, read_only=True)
     course_cover = CoverCourseSerializer(source='covercourse', read_only=True)
@@ -53,7 +68,17 @@ class CourseSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False
     )
+    reviews = ReviewSerializer(many=True, read_only=True)
+    average_rating = serializers.SerializerMethodField()
+    rating_count = serializers.SerializerMethodField()
+    
+    def get_average_rating(self, obj):
+        return obj.average_rating()
+    
+    def get_rating_count(self, obj):
+        return obj.rating_count()
+    
     class Meta:
         model = Course
-        fields = ['id', 'title', 'description', 'category', 'instructor', 'instructor_id', 'lessons', 'course_cover', 'created_at', 'updated_at']
+        fields = ['id', 'title', 'description', 'category', 'instructor', 'instructor_id', 'lessons', 'course_cover', 'reviews', 'average_rating', 'rating_count', 'created_at', 'updated_at']
         read_only_fields = ['created_at', 'updated_at']

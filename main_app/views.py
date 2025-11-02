@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics, permissions, serializers
-from .models import Course, Lesson, CoverCourse, User
-from .serializers import CourseSerializer, LessonSerializer, CoverCourseSerializer, UserSerializer
+from .models import Course, Lesson, CoverCourse, User, Review
+from .serializers import CourseSerializer, LessonSerializer, CoverCourseSerializer, UserSerializer, ReviewSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
@@ -198,5 +198,93 @@ class CoverCourseDetail(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as err:
+            return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ReviewsIndex(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ReviewSerializer
+
+    def get(self, request):
+        try:
+            course_id = request.query_params.get('course_id')
+            if course_id:
+                queryset = Review.objects.filter(course_id=course_id)
+            else:
+                queryset = Review.objects.all()
+            serializer = self.serializer_class(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as err:
+            return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def post(self, request):
+        try:
+            if not request.user.is_student():
+                return Response(
+                    {'error': 'Only students can create reviews'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            
+            course_id = request.data.get('course')
+            if Review.objects.filter(course_id=course_id, student=request.user).exists():
+                return Response(
+                    {'error': 'You have already reviewed this course. You can update your existing review.'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                serializer.save(student=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as err:
+            return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ReviewDetail(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ReviewSerializer
+
+    def get(self, request, id):
+        try:
+            review = Review.objects.get(id=id)
+            serializer = self.serializer_class(review)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Review.DoesNotExist:
+            return Response({'error': 'Review not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as err:
+            return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request, id):
+        try:
+            review = Review.objects.get(id=id)
+            if review.student != request.user:
+                return Response(
+                    {'error': 'You can only update your own reviews'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            serializer = self.serializer_class(review, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Review.DoesNotExist:
+            return Response({'error': 'Review not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as err:
+            return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request, id):
+        try:
+            review = Review.objects.get(id=id)
+            if review.student != request.user and not request.user.is_staff:
+                return Response(
+                    {'error': 'You can only delete your own reviews'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            review.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Review.DoesNotExist:
+            return Response({'error': 'Review not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as err:
             return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -39,6 +39,16 @@ class Course(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
+  def average_rating(self):
+    from django.db.models import Avg
+    reviews = self.reviews.all()
+    if reviews.exists():
+      return round(reviews.aggregate(Avg('rating'))['rating__avg'] or 0, 2)
+    return None
+
+  def rating_count(self):
+    return self.reviews.count()
+
   def __str__(self):
     return self.title
 
@@ -61,3 +71,32 @@ class Lesson(models.Model):
   
   def __str__(self):
     return f"{self.title} - {self.course.title}"
+
+class Review(models.Model):
+    RATING_CHOICES = [
+        (1, '1 - Poor'),
+        (2, '2 - Fair'),
+        (3, '3 - Good'),
+        (4, '4 - Very Good'),
+        (5, '5 - Excellent'),
+    ]
+    
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='reviews')
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='reviews',
+        limit_choices_to={'role': 'student'},
+        help_text='Student who wrote this review'
+    )
+    rating = models.IntegerField(choices=RATING_CHOICES, help_text='Rating from 1 to 5')
+    comment = models.TextField(blank=True, null=True, help_text='Optional review comment')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ['course', 'student']
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.student.username} - {self.course.title} ({self.rating}/5)"
