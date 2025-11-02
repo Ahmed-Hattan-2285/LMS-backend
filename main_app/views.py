@@ -1,10 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, generics, permissions
-from .models import Course, Lesson, CoverCourse
+from rest_framework import status, generics, permissions, serializers
+from .models import Course, Lesson, CoverCourse, User
 from .serializers import CourseSerializer, LessonSerializer, CoverCourseSerializer, UserSerializer
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 
@@ -25,6 +24,8 @@ class CreateUserView(generics.CreateAPIView):
                 'user': UserSerializer(user).data
             }
             return Response(data, status=status.HTTP_201_CREATED)
+        except serializers.ValidationError as err:
+            return Response(err.detail, status=status.HTTP_400_BAD_REQUEST)
         except Exception as err:
             return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -76,7 +77,10 @@ class CoursesIndex(APIView):
 
     def get(self, request):
         try:
-            queryset = Course.objects.filter(user=request.user)
+            if request.user.is_instructor():
+                queryset = Course.objects.filter(instructor=request.user)
+            else:
+                queryset = Course.objects.all()
             serializer = self.serializer_class(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as err:
@@ -84,9 +88,14 @@ class CoursesIndex(APIView):
 
     def post(self, request):
         try:
+            if not request.user.is_instructor():
+                return Response(
+                    {'error': 'Only instructors can create courses'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
             serializer = self.serializer_class(data=request.data)
             if serializer.is_valid():
-                serializer.save(user_id=request.user.id)
+                serializer.save(instructor=request.user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as err:
@@ -107,6 +116,11 @@ class LessonsIndex(APIView):
 
     def post(self, request):
         try:
+            if not request.user.is_instructor():
+                return Response(
+                    {'error': 'Only instructors can create lessons'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
             serializer = self.serializer_class(data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -131,6 +145,11 @@ class CourseDetail(APIView):
     def put(self, request, id):
         try:
             course = Course.objects.get(id=id)
+            if not request.user.is_instructor() or course.instructor != request.user:
+                return Response(
+                    {'error': 'Only the course instructor can edit this course'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
             serializer = self.serializer_class(course, data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -142,6 +161,11 @@ class CourseDetail(APIView):
     def delete(self, request, id):
         try:
             course = Course.objects.get(id=id)
+            if not request.user.is_instructor() or course.instructor != request.user:
+                return Response(
+                    {'error': 'Only the course instructor can delete this course'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
             course.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as err:
