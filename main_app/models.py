@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.db.models import Avg
 
 class User(AbstractUser):
     ROLE_CHOICES = [
@@ -40,7 +41,6 @@ class Course(models.Model):
   updated_at = models.DateTimeField(auto_now=True)
 
   def average_rating(self):
-    from django.db.models import Avg
     reviews = self.reviews.all()
     if reviews.exists():
       return round(reviews.aggregate(Avg('rating'))['rating__avg'] or 0, 2)
