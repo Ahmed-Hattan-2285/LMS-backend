@@ -1,4 +1,54 @@
-RESTful Routing for LMS
+## Learning Management System
+<p>A web-based Learning Management System (LMS) that allows instructors to create and manage online courses while enabling students to enroll, watch lessons, and leave Reviews and Rating.</p>
+
+## Tech Stack
+<table border="1" width="100%">
+    <thead>
+        <tr>
+            <th width="6%">Technology</th>
+            <th width="55%">Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>Python</td><td>Primary backend programming language.</td>
+        <tr><td>Django</td><td>Web framework providing MVC architecture.</td>
+        <tr><td>Django REST Framework</td><td>For creating RESTful API endpoints.</td>
+        <tr><td>PostgreSQL</td><td>Relational database for secure and structured data storage.</td>
+        <tr><td>CORS Headers</td><td>To enable frontend-backend communication.</td>
+    </tbody>
+</table>
+
+## Frontend Link 
+
+[Frontend](https://github.com/Ahmed-Hattan-2285/LMS-frontend).
+
+## Link to Deployed Site 
+
+[Deployed](http://localhost:8000/).
+
+## ERD diagram
+
+<img width="100%" src="/frontend/src/assets/images/LMS ERD.png" />
+
+## RESTful Routing for LMS
+
+<h2>Users</h2>
+<table border="1" width="100%">
+    <thead>
+        <tr>
+            <th width="15%">Entity</th>
+            <th width="25%">HTTP Method</th>
+            <th width="25%">Endpoint</th>
+            <th width="20%">CRUD</th>
+            <th width="50%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>Users</td><td>POST</td><td>/Users/register/</td><td>Create</td><td>Register a new user account</td></tr>
+        <tr><td>Users</td><td>POST</td><td>/users/login/</td><td>Read</td><td>Authenticate and log in a user</td></tr>
+        <tr><td>Users</td><td>POST</td><td>users/verify/</td><td>Read</td><td>Verify user credentials or email</td></tr>
+    </tbody>
+</table>
 
 <h2>Courses</h2>
 <table border="1" width="100%">
@@ -6,14 +56,15 @@ RESTful Routing for LMS
         <tr>
             <th width="15%">Entity</th>
             <th width="25%">HTTP Method</th>
-            <th width="50%">Endpoint</th>
-            <th width="50%">CRUD</th>
-            <th width="10%">Description</th>
+            <th width="25%">Endpoint</th>
+            <th width="20%">CRUD</th>
+            <th width="50%">Description</th>
         </tr>
     </thead>
     <tbody>
         <tr><td>Courses</td><td>GET</td><td>/courses/</td><td>Read</td><td>Get all courses</td></tr>
         <tr><td>Courses</td><td>POST</td><td>/courses/</td><td>Create</td><td>Create new course</td></tr>
+        <tr><td>Courses</td><td>POST</td><td>/courses/cover</td><td>Create</td><td>Create a Cover Course</td></tr>
         <tr><td>Courses</td><td>GET</td><td>/courses/{id}</td><td>Read</td><td>Get one course by ID</td></tr>
         <tr><td>Courses</td><td>PUT</td><td>/courses/{id}/</td><td>Update</td><td>Update course info</td></tr>
         <tr><td>Courses</td><td>DELETE</td><td>/courses/{id}/</td><td>Delete</td><td>Delete a course</td></tr>
@@ -26,9 +77,9 @@ RESTful Routing for LMS
         <tr>
             <th width="15%">Entity</th>
             <th width="25%">HTTP Method</th>
-            <th width="50%">Endpoint</th>
-            <th width="50%">CRUD</th>
-            <th width="10%">Description</th>
+            <th width="25%">Endpoint</th>
+            <th width="20%">CRUD</th>
+            <th width="50%">Description</th>
         </tr>
     </thead>
     <tbody>
@@ -46,9 +97,9 @@ RESTful Routing for LMS
         <tr>
             <th width="15%">Entity</th>
             <th width="25%">HTTP Method</th>
-            <th width="50%">Endpoint</th>
-            <th width="50%">CRUD</th>
-            <th width="10%">Description</th>
+            <th width="25%">Endpoint</th>
+            <th width="20%">CRUD</th>
+            <th width="50%">Description</th>
         </tr>
     </thead>
     <tbody>
@@ -58,3 +109,12 @@ RESTful Routing for LMS
         <tr><td>reviews</td><td>DELETE</td><td>/reviews/{id}/</td><td>Delete</td><td>Delete a review</td></tr>
     </tbody>
 </table>
+
+### IceBox Features
+- **Admin Analytics Dashboard** – Monitor active users, course popularity, and engagement statistics.
+
+- **Email Notifications** – Send automatic emails for new enrollments or password resets.
+
+- **Payment Integration** – Allow students to pay for premium courses using credit card or PayPal.
+
+- **AI Course Recommendation Engine** – Suggest related courses based on learning history.
