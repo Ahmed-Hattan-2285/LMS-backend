@@ -28,7 +28,7 @@
 
 ## ERD diagram
 
-<img width="100%" src="/frontend/src/assets/images/LMS ERD.png" />
+![ERD!] (LMS-ERD.png)
 
 ## RESTful Routing for LMS
 
