@@ -28,7 +28,7 @@
 
 ## ERD diagram
 
-![ERD!] (LMS-ERD.png)
+![ERD](LMS-ERD.png)
 
 ## RESTful Routing for LMS
 
