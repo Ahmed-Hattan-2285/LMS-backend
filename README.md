@@ -19,8 +19,6 @@ RESTful Routing for LMS
         <tr><td>Courses</td><td>DELETE</td><td>/courses/{id}/</td><td>Delete</td><td>Delete a course</td></tr>
     </tbody>
 </table>
-    </tbody>
-</table>
 
 <h2>lessons</h2>
 <table border="1" width="100%">
@@ -41,8 +39,6 @@ RESTful Routing for LMS
         <tr><td>lessons</td><td>DELETE</td><td>/lessons/{id}/</td><td>Delete</td><td>Delete a lesson</td></tr>
     </tbody>
 </table>
-    </tbody>
-</table>
 
 <h2>reviews</h2>
 <table border="1" width="100%">
@@ -58,8 +54,7 @@ RESTful Routing for LMS
     <tbody>
         <tr><td>reviews</td><td>GET</td><td>/reviews/</td><td>Read</td><td>Get all reviews</td></tr>
         <tr><td>reviews</td><td>POST</td><td>/reviews/</td><td>Create</td><td>Create new review</td></tr>
+        <tr><td>reviews</td><td>PUT</td><td>/reviews/{id}/</td><td>Update</td><td>Update review info</td></tr>
         <tr><td>reviews</td><td>DELETE</td><td>/reviews/{id}/</td><td>Delete</td><td>Delete a review</td></tr>
-    </tbody>
-</table>
     </tbody>
 </table>

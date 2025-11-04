@@ -130,6 +130,54 @@ class LessonsIndex(APIView):
             return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class LessonDetail(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = LessonSerializer
+
+    def get(self, request, id):
+        try:
+            lesson = Lesson.objects.get(id=id)
+            serializer = self.serializer_class(lesson)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Lesson.DoesNotExist:
+            return Response({'error': 'Lesson not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as err:
+            return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request, id):
+        try:
+            lesson = Lesson.objects.get(id=id)
+            if not request.user.is_instructor() or lesson.course.instructor != request.user:
+                return Response(
+                    {'error': 'Only the course instructor can edit this lesson'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            serializer = self.serializer_class(lesson, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Lesson.DoesNotExist:
+            return Response({'error': 'Lesson not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as err:
+            return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request, id):
+        try:
+            lesson = Lesson.objects.get(id=id)
+            if not request.user.is_instructor() or lesson.course.instructor != request.user:
+                return Response(
+                    {'error': 'Only the course instructor can delete this lesson'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            lesson.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Lesson.DoesNotExist:
+            return Response({'error': 'Lesson not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as err:
+            return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class CourseDetail(APIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CourseSerializer
