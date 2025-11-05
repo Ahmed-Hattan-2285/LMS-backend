@@ -34,17 +34,23 @@
 ## Installation & Setup (Using Docker)
 
 **1. Clone the Repository**
-```git clone https://github.com/yourusername/lms-backend.git
-cd lms-backend```
+```
+git clone https://github.com/yourusername/lms-backend.git
+cd lms-backend
+```
 
 **2. Create .env file**
-```DEBUG=True
+```
+DEBUG=True
 SECRET_KEY=your-secret-key
 DATABASE_URL=postgres://postgres:password@db:5432/lms_db
-ALLOWED_HOSTS=*```
+ALLOWED_HOSTS=*
+```
 
 **3. Build & Run with Docker**
-```docker compose up --build```
+```
+docker compose up --build
+```
 
 ## RESTful Routing for LMS
 
