@@ -1,5 +1,21 @@
 ## Learning Management System
-<p>A web-based Learning Management System (LMS) that allows instructors to create and manage online courses while enabling students to enroll, watch lessons, and leave Reviews and Rating.</p>
+**Project Description:**
+<p>The Learning Management System (LMS) backend is built using Django REST Framework to manage courses, lessons, and users efficiently.
+    
+It provides secure RESTful APIs for authentication, content management, and communication between instructors and students.
+
+This backend serves as the core of the LMS, connecting to a PostgreSQL database and integrating seamlessly with the React frontend.</p>
+
+## Repository Description
+This repository contains the backend code for the LMS project, including:
+
+- Django project configuration and settings.
+
+- REST API endpoints for managing users, courses, and lessons.
+
+- PostgreSQL database models.
+
+- Docker setup for easy deployment and local development.
 
 ## Tech Stack
 <table border="1" width="100%">
@@ -19,19 +35,20 @@
     </tbody>
 </table>
 
-## Frontend Link 
+### Frontend Repository 
 
 [Frontend](https://github.com/Ahmed-Hattan-2285/LMS-frontend).
 
-## Link to Deployed Site 
+### Deployed Site
 
-[Deployed](http://localhost:8000/).
+[Live Demo](http://localhost:8000/).
 
-## ERD diagram
+### ERD diagram
+Here’s the Entity Relationship Diagram (ERD) representing the database structure:
 
 ![ERD](./assets/LMS-ERD.png)
 
-## Installation & Setup (Using Docker)
+### Installation & Setup (Using Docker)
 
 **1. Clone the Repository**
 ```
@@ -139,4 +156,4 @@ docker compose up --build
 
 - **Payment Integration** – Allow students to pay for premium courses using credit card or PayPal.
 
-- **AI Course Recommendation Engine** – Suggest related courses based on learning history.
+- **AI Course Recommendation** – Suggest related courses based on learning history.
