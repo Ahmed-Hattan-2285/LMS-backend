@@ -13,7 +13,8 @@
         <tr><td>Python</td><td>Primary backend programming language.</td>
         <tr><td>Django</td><td>Web framework providing MVC architecture.</td>
         <tr><td>Django REST Framework</td><td>For creating RESTful API endpoints.</td>
-        <tr><td>PostgreSQL</td><td>Relational database for secure and structured data storage.</td>
+        <tr><td>PostgreSQL</td><td>Relational database for secure and structured data storage.
+        </td>
         <tr><td>CORS Headers</td><td>To enable frontend-backend communication.</td>
     </tbody>
 </table>
@@ -29,6 +30,21 @@
 ## ERD diagram
 
 ![ERD](./assets/LMS-ERD.png)
+
+## Installation & Setup (Using Docker)
+
+**1. Clone the Repository**
+```git clone https://github.com/yourusername/lms-backend.git
+cd lms-backend```
+
+**2. Create .env file**
+```DEBUG=True
+SECRET_KEY=your-secret-key
+DATABASE_URL=postgres://postgres:password@db:5432/lms_db
+ALLOWED_HOSTS=*```
+
+**3. Build & Run with Docker**
+```docker compose up --build```
 
 ## RESTful Routing for LMS
 
