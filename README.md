@@ -4,7 +4,7 @@
     
 It provides secure RESTful APIs for authentication, content management, and communication between instructors and students.
 
-This backend serves as the core of the LMS, connecting to a PostgreSQL database and integrating seamlessly with the React frontend.</p>
+This backend serves as the core of the CourseFlow, connecting to a PostgreSQL database and integrating seamlessly with the React frontend.</p>
 
 ## Repository Description
 This repository contains the backend code for the CourseFlow project, including:
@@ -52,15 +52,15 @@ Here’s the Entity Relationship Diagram (ERD) representing the database structu
 
 **1. Clone the Repository**
 ```
-git clone https://github.com/yourusername/lms-backend.git
-cd lms-backend
+git clone https://github.com/yourusername/CourseFlow-backend.git
+cd CourseFlow-backend
 ```
 
 **2. Create .env file**
 ```
 DEBUG=True
 SECRET_KEY=your-secret-key
-DATABASE_URL=postgres://postgres:password@db:5432/lms_db
+DATABASE_URL=postgres://postgres:password@db:5432/CourseFlow_db
 ALLOWED_HOSTS=*
 ```
 
@@ -69,7 +69,7 @@ ALLOWED_HOSTS=*
 docker compose up --build
 ```
 
-## RESTful Routing for LMS
+## RESTful Routing for CourseFlow
 
 <h2>Users</h2>
 <table border="1" width="100%">
