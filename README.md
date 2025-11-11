@@ -1,13 +1,13 @@
-## Learning Management System
+## CourseFlow
 **Project Description:**
-<p>The Learning Management System (LMS) backend is built using Django REST Framework to manage courses, lessons, and users efficiently.
+<p>The CourseFlow backend is built using Django REST Framework to manage courses, lessons, and users efficiently.
     
 It provides secure RESTful APIs for authentication, content management, and communication between instructors and students.
 
 This backend serves as the core of the LMS, connecting to a PostgreSQL database and integrating seamlessly with the React frontend.</p>
 
 ## Repository Description
-This repository contains the backend code for the LMS project, including:
+This repository contains the backend code for the CourseFlow project, including:
 
 - Django project configuration and settings.
 
@@ -37,7 +37,7 @@ This repository contains the backend code for the LMS project, including:
 
 ### Frontend Repository 
 
-[Frontend](https://github.com/Ahmed-Hattan-2285/LMS-frontend).
+[Frontend](https://github.com/Ahmed-Hattan-2285/CourseFlow-frontend).
 
 ### Deployed Site
 
